@@ -2,6 +2,8 @@
 
 import telebot  # pyTelegramBotAPI	4.3.1
 from telebot import types
+import requests
+import bs4
 
 bot = telebot.TeleBot('5105972662:AAG24fr382U1_hosO4Zrb-tv_BTakAV1MPk')  # Создаем экземпляр бота
 
@@ -42,20 +44,28 @@ def get_text_messages(message):
         btn1 = types.KeyboardButton("Картиночки с котиками")
         btn2 = types.KeyboardButton("Анекдоты")
         btn3 = types.KeyboardButton("Картиночки с собачками")
+        btn4 = types.KeyboardButton("Играть в камень-ножницы-бумага")
         back = types.KeyboardButton("Вернуться в главное меню")
-        markup.add(btn1, btn2, btn3, back)
+        markup.add(btn1, btn2, btn3, btn4, back)
         bot.send_message(chat_id, text="Развлечения", reply_markup=markup)
-
-    elif ms_text == "/cat" or ms_text == "Картиночки с котиками":  # .........................................................
+# ..............................................................................
+    elif ms_text == "/cat" or ms_text == "Картиночки с котиками":
+        contents = requests.get('https://random.cat/meow.json').json()
+        urlCAT = contents['url']
+        bot.send_photo(chat_id, photo=urlCAT, caption="Держи котика!")
+# ..............................................................................
+    elif ms_text == "Анекдоты":
+        bot.send_message(chat_id, text="еще не готово...")
+# .............................................................................
+    elif ms_text == "/dog" or ms_text == "Картиночки с собачками":
+        contents = requests.get('https://random.dog/woof.json').json()
+        urlDOG = contents['url']
+        bot.send_photo(chat_id, photo=urlDOG, caption="Держи собатьку!")
+#..............................................................................
+    elif ms_text == "Играть в камень-ножницы-бумага":
         bot.send_message(chat_id, text="еще не готово...")
 
-    elif ms_text == "Анекдоты":  # .............................................................................
-        bot.send_message(chat_id, text="еще не готово...")
-
-    elif ms_text == "/dog" or ms_text == "Картиночки с собачками":  # .............................................................................
-        bot.send_message(chat_id, text="еще не готово...")
-
-    elif ms_text == "WEB-камера":
+    elif ms_text == "WEB-камера":   # .............................................................................
         bot.send_message(chat_id, text="еще не готово...")
 
     elif ms_text == "Управление":  # ...................................................................................
